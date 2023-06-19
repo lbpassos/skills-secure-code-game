@@ -1,5 +1,5 @@
 import os
-from flask import Flask, request  
+from flask import Flask, request
 
 ### Unrelated to the exercise -- Starts here -- Please ignore
 app = Flask(__name__)
@@ -10,27 +10,36 @@ def source():
 ### Unrelated to the exercise -- Ends here -- Please ignore
 
 class TaxPayer:
-    
+
     def __init__(self, username, password):
         self.username = username
         self.password = password
         self.prof_picture = None
         self.tax_form_attachment = None
 
-    # returns the path of an optional profile picture that users can set        
+    # returns the path of an optional profile picture that users can set
     def get_prof_picture(self, path=None):
         # setting a profile picture is optional
         if not path:
             pass
-        
+
         # defends against path traversal attacks
         if path.startswith('/') or path.startswith('..'):
             return None
-        
+
         # builds path
+        print("TSTE: " + __file__)
         base_dir = os.path.dirname(os.path.abspath(__file__))
+
+        print("Base Dir: " + base_dir)
         prof_picture_path = os.path.normpath(os.path.join(base_dir, path))
-    
+        print("prof_picture_path: " + prof_picture_path)
+
+        #Mine
+        #GOOD -- Verify with normalised version of path
+        if not prof_picture_path.startswith(base_dir):
+            return None
+
         with open(prof_picture_path, 'rb') as pic:
             picture = bytearray(pic.read())
 
@@ -40,10 +49,10 @@ class TaxPayer:
     # returns the path of an attached tax form that every user should submit
     def get_tax_form_attachment(self, path=None):
         tax_data = None
-        
+
         if not path:
             raise Exception("Error: Tax form is required for all users")
-       
+
         with open(path, 'rb') as form:
             tax_data = bytearray(form.read())
 
