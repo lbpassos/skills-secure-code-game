@@ -53,6 +53,12 @@ class TaxPayer:
         if not path:
             raise Exception("Error: Tax form is required for all users")
 
+        #My solution
+        base_dir = os.path.dirname(os.path.abspath(__file__))
+        if not path.startswith(base_dir):
+            raise Exception("Error: Tax form is required for all users")
+
+
         with open(path, 'rb') as form:
             tax_data = bytearray(form.read())
 
