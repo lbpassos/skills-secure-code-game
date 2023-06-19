@@ -28,12 +28,12 @@ class TaxPayer:
             return None
 
         # builds path
-        print("TSTE: " + __file__)
+        #print("TSTE: " + __file__)
         base_dir = os.path.dirname(os.path.abspath(__file__))
 
-        print("Base Dir: " + base_dir)
+        #print("Base Dir: " + base_dir)
         prof_picture_path = os.path.normpath(os.path.join(base_dir, path))
-        print("prof_picture_path: " + prof_picture_path)
+        #print("prof_picture_path: " + prof_picture_path)
 
         #Mine
         #GOOD -- Verify with normalised version of path
@@ -54,11 +54,22 @@ class TaxPayer:
             raise Exception("Error: Tax form is required for all users")
 
         #My solution
-        base_dir = os.path.dirname(os.path.abspath(__file__))
-        if not path.startswith(base_dir):
-            return None
-            #raise Exception("Error: Tax form is required for all users")
+        print("PATH: " + path)
+        #if path.startswith('/') or path.startswith('..'):
+        #    raise Exception("Error: Path starts with / or ..")
 
+        base_dir = os.path.dirname(os.path.abspath(__file__))
+        print("BASE DIR: " + base_dir)
+        file_after_basedir = path[len(base_dir):]
+        print("AFTRE BASE DIR: " + file_after_basedir)
+
+        if file_after_basedir.startswith('.') or path.startswith('..'):
+            return None
+
+        #if not path.startswith(base_dir):
+        #    return None
+            #raise Exception("Error: Tax form is required for all users")
+        #print("PATH: " + path)
 
         with open(path, 'rb') as form:
             tax_data = bytearray(form.read())
