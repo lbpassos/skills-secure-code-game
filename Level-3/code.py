@@ -54,16 +54,28 @@ class TaxPayer:
             raise Exception("Error: Tax form is required for all users")
 
         #My solution
-        print("PATH: " + path)
+        #print("PATH: " + path)
         #if path.startswith('/') or path.startswith('..'):
         #    raise Exception("Error: Path starts with / or ..")
 
         base_dir = os.path.dirname(os.path.abspath(__file__))
-        print("BASE DIR: " + base_dir)
-        file_after_basedir = path[len(base_dir):]
-        print("AFTRE BASE DIR: " + file_after_basedir)
+        #print("BASE DIR: " + base_dir)
 
-        if file_after_basedir.startswith('.') or path.startswith('..'):
+        base_dir_path = path[:len(base_dir)]
+        #print("BASE DIR PATH: " + base_dir)
+
+        if base_dir!=base_dir_path:
+            return None
+
+
+        file_after_basedir = path[len(base_dir):]
+        #print("AFTRE BASE DIR: " + file_after_basedir)
+
+        if file_after_basedir.startswith("."):
+            #print("LLLLLLLLL")
+            return None
+
+        if file_after_basedir.endswith(".pdf") == False:
             return None
 
         #if not path.startswith(base_dir):
