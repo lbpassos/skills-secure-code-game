@@ -65,10 +65,10 @@ class TaxPayer:
         #print("FILTERED PATH: " + filtered_path)
 
         if filtered_path.startswith(base_dir):
-            with open(path, 'rb') as form:
+            with open(filtered_path, 'rb') as form:
                 tax_data = bytearray(form.read())
 
             # assume that tax data is returned on screen after this
-            return path
+            return filtered_path
         else:
             return None
