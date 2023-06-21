@@ -61,30 +61,14 @@ class TaxPayer:
         base_dir = os.path.dirname(os.path.abspath(__file__))
         #print("BASE DIR: " + base_dir)
 
-        base_dir_path = path[:len(base_dir)]
-        #print("BASE DIR PATH: " + base_dir)
+        filtered_path = os.path.realpath(path)
+        #print("FILTERED PATH: " + filtered_path)
 
-        if base_dir!=base_dir_path:
+        if filtered_path.startswith(base_dir):
+            with open(path, 'rb') as form:
+                tax_data = bytearray(form.read())
+
+            # assume that tax data is returned on screen after this
+            return path
+        else:
             return None
-
-
-        file_after_basedir = path[len(base_dir):]
-        #print("AFTRE BASE DIR: " + file_after_basedir)
-
-        if file_after_basedir.startswith("."):
-            #print("LLLLLLLLL")
-            return None
-
-        if file_after_basedir.endswith(".pdf") == False:
-            return None
-
-        #if not path.startswith(base_dir):
-        #    return None
-            #raise Exception("Error: Tax form is required for all users")
-        #print("PATH: " + path)
-
-        with open(path, 'rb') as form:
-            tax_data = bytearray(form.read())
-
-        # assume that tax data is returned on screen after this
-        return path
