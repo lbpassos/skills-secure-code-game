@@ -125,18 +125,31 @@ class DB_CRUD_ops(object):
             cur = db_con.cursor()
 
             res = "[METHOD EXECUTED] get_stock_price\n"
-            query = "SELECT price FROM stocks WHERE symbol = '" + stock_symbol + "'"
-            res += "[QUERY] " + query + "\n"
-            if ';' in query:
-                res += "[SCRIPT EXECUTION]\n"
-                #cur.executescript(query)
-            else:
-                #cur.execute(query)
-                cur.execute("SELECT price FROM stocks WHERE symbol = ?", [stock_symbol])
 
-                query_outcome = cur.fetchall()
-                for result in query_outcome:
-                    res += "[RESULT] " + str(result) + "\n"
+            # a block list or restricted characters that should not be presented in user-supplied input
+            restricted_chars = ";%&^!#-"
+
+            # remove all ocurrences of the restricted_chars and everything after
+            index = 0
+            stripped = stock_symbol
+            while(index<len(restricted_chars)):
+                if restricted_chars[index] in stripped:
+                    stripped = stripped.split(restricted_chars[index], 1)[0]
+                index += 1
+
+
+            # remove single quotes
+            single_quotes = "'"
+            sanitized_query = stripped.translate({ord(char):None for char in single_quotes})
+            #print("\nSANITIZED: " + str(type(sanitized_query)))
+            query = "SELECT price FROM stocks WHERE symbol = '" + sanitized_query + "'"
+            res += "[QUERY] " + query + "\n"
+            #cur.execute(query)
+            a=cur.execute("SELECT price FROM stocks WHERE symbol = ?", [sanitized_query])
+            
+            query_outcome = cur.fetchall()
+            for result in query_outcome:
+                res += "[RESULT] " + str(result) + "\n"
             return res
 
         except sqlite3.Error as e:
