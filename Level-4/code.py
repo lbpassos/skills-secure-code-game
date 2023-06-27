@@ -179,6 +179,8 @@ class DB_CRUD_ops(object):
         finally:
             db_con.close()
 
+
+    '''
     # executes multiple queries
     # Example: SELECT price FROM stocks WHERE symbol = 'MSFT'; SELECT * FROM stocks WHERE symbol = 'MSFT'
     # Example: UPDATE stocks SET price = 310.0 WHERE symbol = 'MSFT'
@@ -210,6 +212,8 @@ class DB_CRUD_ops(object):
         finally:
             db_con.close()
 
+    '''
+    '''
     # executes any query or multiple queries as defined from the user in the form of script
     # Example: SELECT price FROM stocks WHERE symbol = 'MSFT'; SELECT * FROM stocks WHERE symbol = 'MSFT'
     def exec_user_script(self, query):
@@ -241,3 +245,4 @@ class DB_CRUD_ops(object):
 
         finally:
             db_con.close()
+        '''
