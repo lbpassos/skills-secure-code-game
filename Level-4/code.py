@@ -129,9 +129,11 @@ class DB_CRUD_ops(object):
             res += "[QUERY] " + query + "\n"
             if ';' in query:
                 res += "[SCRIPT EXECUTION]\n"
-                cur.executescript(query)
+                #cur.executescript(query)
             else:
-                cur.execute(query)
+                #cur.execute(query)
+                cur.execute("SELECT price FROM stocks WHERE symbol = ?", [stock_symbol])
+
                 query_outcome = cur.fetchall()
                 for result in query_outcome:
                     res += "[RESULT] " + str(result) + "\n"
