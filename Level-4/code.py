@@ -164,7 +164,9 @@ class DB_CRUD_ops(object):
             query = "UPDATE stocks SET price = '%d' WHERE symbol = '%s'" % (price, stock_symbol)
             res += "[QUERY] " + query + "\n"
 
-            cur.execute(query)
+            #cur.execute(query)
+            cur.execute("UPDATE stocks SET price = ? WHERE symbol = ?", [price, stock_symbol])
+
             db_con.commit()
             query_outcome = cur.fetchall()
             for result in query_outcome:
