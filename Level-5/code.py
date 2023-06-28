@@ -5,6 +5,9 @@ import hashlib
 import os
 import bcrypt
 
+# My solution. strong password hashing algorithm (and includes a per-password salt by default)
+from argon2 import PasswordHasher
+
 class Random_generator:
 
     # generates a random token
@@ -24,15 +27,24 @@ class SHA256_hasher:
 
     # produces the password hash by combining password + salt because hashing
     def password_hash(self, password, salt):
+        '''
         password = binascii.hexlify(hashlib.sha256(password.encode()).digest())
         password_hash = bcrypt.hashpw(password, salt)
         return password_hash.decode('ascii')
+        '''
+        #No need to use salt. Already in default
+        ph = PasswordHasher()
+        return ph.hash(password) # GOOD
 
     # verifies that the hashed password reverses to the plain text version on verification
     def password_verification(self, password, password_hash):
+        '''
         password = binascii.hexlify(hashlib.sha256(password.encode()).digest())
         password_hash = password_hash.encode('ascii')
         return bcrypt.checkpw(password, password_hash)
+        '''
+        ph = PasswordHasher()
+        return ph.verify(password_hash, password) # GOOD
 
 class MD5_hasher:
 
