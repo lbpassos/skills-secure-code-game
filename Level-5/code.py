@@ -7,6 +7,7 @@ import bcrypt
 
 # My solution. strong password hashing algorithm (and includes a per-password salt by default)
 from argon2 import PasswordHasher
+import scrypt
 
 class Random_generator:
 
@@ -23,6 +24,7 @@ class Random_generator:
         salt = ''.join(str(random.randint(0, 9)) for _ in range(21)) + '.'
         return f'$2b${rounds}${salt}'.encode()
 
+# Now argon2
 class SHA256_hasher:
 
     # produces the password hash by combining password + salt because hashing
@@ -46,15 +48,24 @@ class SHA256_hasher:
         ph = PasswordHasher()
         return ph.verify(password_hash, password) # GOOD
 
+# Now scrypt
 class MD5_hasher:
 
     # same as above but using a different algorithm to hash which is MD5
     def password_hash(self, password):
-        return hashlib.md5(password.encode()).hexdigest()
+        #return hashlib.md5(password.encode()).hexdigest()
+        maxtime=0.5
+        return scrypt.encrypt(password, PASSWORD_HASHER, maxtime=maxtime)
 
     def password_verification(self, password, password_hash):
-        password = self.password_hash(password)
-        return secrets.compare_digest(password.encode(), password_hash.encode())
+        #password = self.password_hash(password)
+        #return secrets.compare_digest(password.encode(), password_hash.encode())
+        maxtime=0.5
+        try:
+            scrypt.decrypt(password_hash, PASSWORD_HASHER, maxtime)
+            return True
+        except scrypt.error:
+            return False
 
 # a collection of sensitive secrets necessary for the software to operate
 PRIVATE_KEY = os.environ.get('PRIVATE_KEY')
